@@ -5,8 +5,8 @@
 
 
 
-Option::Option(float S, float r, float sig, float T, float K, float d) :
-    spot(S), rate(r), volatility(sig), maturity(T), strike(K), dividend(d)
+Option::Option(float spot, float rate, float volatility, float maturity, float strike, float dividend) :
+    S(spot), r(rate), sig(volatility), T(maturity), K(strike), d(dividend)
     {   assert(sig > 0); // constructeur en privé pour que seules les classes filles puissent utiliser
         assert(S >= 0);
         assert(d >= 0);
@@ -15,10 +15,10 @@ Option::Option(float S, float r, float sig, float T, float K, float d) :
 
 
 float Call::payoff(float underlying_price) const {
-    return std::max(underlying_price - strike, 0.0f);
+    return std::max(underlying_price - K, 0.0f);
     // mettre 0 en float car max est définie telle que les deux param ont le même type
 }
 
 float Put::payoff(float underlying_price) const {
-    return std::max(strike - underlying_price, 0.0f);
+    return std::max(K - underlying_price, 0.0f);
 }

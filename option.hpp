@@ -4,8 +4,12 @@
 #include <iostream>
 
 struct Option {
-    float spot, rate, volatility, strike, dividend;
-    float maturity; // in years
+    float S; // Spot of the underlying price
+    float r; // risk-free interest rate
+    float sig; // volatility
+    float K; // Strike
+    float d; // Dividend
+    float T; // Maturity in years
 
     Option(float, float, float, float, float, float);
 
