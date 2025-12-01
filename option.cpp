@@ -5,11 +5,10 @@
 
 
 
-Option::Option(float spot, float rate, float volatility, float maturity, float strike, float dividend) :
-    S(spot), r(rate), sig(volatility), T(maturity), K(strike), d(dividend)
+Option::Option(float spot, float rate, float volatility, float maturity, float strike) :
+    S(spot), r(rate), sig(volatility), T(maturity), K(strike)
     {   assert(sig > 0); // constructeur en privé pour que seules les classes filles puissent utiliser
         assert(S >= 0);
-        assert(d >= 0);
         assert(T >= 0);
     };
 

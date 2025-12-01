@@ -8,10 +8,9 @@ struct Option {
     float r; // risk-free interest rate
     float sig; // volatility
     float K; // Strike
-    float d; // Dividend
     float T; // Maturity in years
 
-    Option(float, float, float, float, float, float);
+    Option(float, float, float, float, float);
 
     virtual float payoff(float underlying_price) const = 0;
 };
