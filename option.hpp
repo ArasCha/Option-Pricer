@@ -4,7 +4,7 @@
 #include <iostream>
 
 struct Option {
-    float S; // Spot of the underlying price
+    float S0; // Spot of the underlying price
     float r; // risk-free interest rate
     float sig; // volatility
     float K; // Strike
@@ -12,17 +12,17 @@ struct Option {
 
     Option(float, float, float, float, float);
 
-    virtual float payoff(float underlying_price) const = 0;
+    virtual double payoff(float underlying_price) const = 0;
 };
 
 
 struct Call final: public Option {
     using Option::Option;
-    float payoff(float) const override;
+    double payoff(float) const override;
 };
 
 
 struct Put final : public Option {
     using Option::Option;
-    float payoff(float) const override;
+    double payoff(float) const override;
 };
