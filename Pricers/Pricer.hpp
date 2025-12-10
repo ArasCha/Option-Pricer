@@ -8,6 +8,9 @@ struct OptionPricer {
 
     virtual double calculate() const = 0;
     
+    /// Computes the average time to calculate the option price
+    /// @param nb_runs Number of runs to average computation time
+    /// @return The average computation time with nb_runs price computations
     std::pair<double, double> benchmark(const int nb_runs) const;
     
     protected:
