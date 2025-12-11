@@ -35,3 +35,12 @@ struct BlackScholesPricer : public OptionPricer {
         double d1 = ( std::log(S0/K) + (r + sig*sig/2) * T ) / (sig * std::sqrt(T));
         double d2 = d1 - sig * std::sqrt(T);
 };
+
+struct MonteCarloPricer : OptionPricer {
+
+    int nb_samples;
+
+    MonteCarloPricer(Option& _instrument, int nb_samples);
+
+    double calculate() const override;
+};

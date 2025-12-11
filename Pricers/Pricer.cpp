@@ -3,6 +3,7 @@
 #include <chrono>
 #include <iostream>
 #include "../utils.hpp"
+#include <cmath>
 
 
 
@@ -40,3 +41,20 @@ double BlackScholesPricer::calculate() const {
 
     throw std::runtime_error("BlackScholesPricer::calculate: unsupported instrument type");
 }
+
+
+MonteCarloPricer::MonteCarloPricer(Option& _instrument, int _nb_samples) :
+    OptionPricer(_instrument), nb_samples(_nb_samples) {}
+
+double MonteCarloPricer::calculate() const {
+
+    double sample_payoff_sum = 0.0;
+
+    for (int i = 0; i<nb_samples; i++) {
+        double G = random_standard_normal();
+        double S_T = S0*std::exp( (r - 0.5*sig*sig)*T + sig*G*std::sqrt(T) );
+        sample_payoff_sum += instrument.payoff(S_T);
+    }
+
+    return sample_payoff_sum/nb_samples;
+};
