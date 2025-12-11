@@ -14,7 +14,8 @@ int main() {
     BlackScholesPricer bspricer(call);
 
     int nb_samples = 10000000;
-    MonteCarloPricer mcpricer(call, nb_samples);
+    NaiveMCpricer naiveMCpricer(call, nb_samples);
+    AntitheticMCpricer antitheticMCpricer(call, nb_samples);
 
     // int nb_runs = 10000;
     // auto bsResults = bspricer.benchmark(nb_runs);
@@ -24,7 +25,8 @@ int main() {
     // std::cout << "time: " << mcResults.first << " price: " << mcResults.second << std::endl;
 
     std::cout << "price BS: " << bspricer.calculate() << std::endl;
-    std::cout << "price MC: " << mcpricer.calculate() << std::endl;
+    std::cout << "price Naive MC: " << naiveMCpricer.calculate() << std::endl;
+    std::cout << "price Antithetic MC: " << antitheticMCpricer.calculate() << std::endl;
 
     return 0;
 }

@@ -46,7 +46,7 @@ double BlackScholesPricer::calculate() const {
 MonteCarloPricer::MonteCarloPricer(Option& _instrument, int _nb_samples) :
     OptionPricer(_instrument), nb_samples(_nb_samples) {}
 
-double MonteCarloPricer::calculate() const {
+double NaiveMCpricer::calculate() const {
 
     double sample_payoff_sum = 0.0;
 
@@ -57,4 +57,19 @@ double MonteCarloPricer::calculate() const {
     }
 
     return sample_payoff_sum/nb_samples;
+};
+
+
+double AntitheticMCpricer::calculate() const {
+
+    double sample_payoff_sum = 0.0;
+
+    for (int i = 0; i<nb_samples; i++) {
+        double G = random_standard_normal();
+        double S_T_p = S0*std::exp( (r - 0.5*sig*sig)*T + sig*G*std::sqrt(T) );
+        double S_T_m = S0*std::exp( (r - 0.5*sig*sig)*T + sig*-G*std::sqrt(T) );
+        sample_payoff_sum += std::exp(-r * T) * ( instrument.payoff(S_T_p) + instrument.payoff(S_T_m) );
+    }
+
+    return sample_payoff_sum/(2 * nb_samples);
 };

@@ -40,7 +40,17 @@ struct MonteCarloPricer : OptionPricer {
 
     int nb_samples;
 
-    MonteCarloPricer(Option& _instrument, int nb_samples);
+    MonteCarloPricer(Option& _instrument, const int nb_samples);
+};
 
+struct NaiveMCpricer : MonteCarloPricer {
+
+    using MonteCarloPricer::MonteCarloPricer;
+    double calculate() const override;
+};
+
+struct AntitheticMCpricer : MonteCarloPricer {
+
+    using MonteCarloPricer::MonteCarloPricer;
     double calculate() const override;
 };
