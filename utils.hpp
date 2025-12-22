@@ -1,5 +1,6 @@
 #include <array>
 
+double standard_normal_pdf(double x);
 
 double normal_cdf(double x);
 

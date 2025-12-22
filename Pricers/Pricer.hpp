@@ -54,3 +54,9 @@ struct AntitheticMCpricer : MonteCarloPricer {
     using MonteCarloPricer::MonteCarloPricer;
     double calculate() const override;
 };
+
+struct ControlVariatesMCpricer : MonteCarloPricer {
+
+    using MonteCarloPricer::MonteCarloPricer;
+    double calculate() const override;
+};

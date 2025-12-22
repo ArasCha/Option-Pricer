@@ -53,10 +53,10 @@ double NaiveMCpricer::calculate() const {
     for (int i = 0; i<nb_samples; i++) {
         double G = random_standard_normal();
         double S_T = S0*std::exp( (r - 0.5*sig*sig)*T + sig*G*std::sqrt(T) );
-        sample_payoff_sum += std::exp(-r * T) * instrument.payoff(S_T);
+        sample_payoff_sum += instrument.payoff(S_T);
     }
 
-    return sample_payoff_sum/nb_samples;
+    return std::exp(-r * T) * sample_payoff_sum/nb_samples;
 };
 
 
@@ -68,8 +68,21 @@ double AntitheticMCpricer::calculate() const {
         double G = random_standard_normal();
         double S_T_p = S0*std::exp( (r - 0.5*sig*sig)*T + sig*G*std::sqrt(T) );
         double S_T_m = S0*std::exp( (r - 0.5*sig*sig)*T + sig*-G*std::sqrt(T) );
-        sample_payoff_sum += std::exp(-r * T) * ( instrument.payoff(S_T_p) + instrument.payoff(S_T_m) );
+        sample_payoff_sum += instrument.payoff(S_T_p) + instrument.payoff(S_T_m);
     }
 
-    return sample_payoff_sum/(2 * nb_samples);
-};
+    return std::exp(-r * T) * sample_payoff_sum/(2 * nb_samples);
+}
+
+double ControlVariatesMCpricer::calculate() const {
+
+    double sample_sum = 0.0;
+
+    for (int i = 0; i<nb_samples; i++) {
+        double G = random_standard_normal();
+        double S_T = S0*std::exp( (r - 0.5*sig*sig)*T + sig*G*std::sqrt(T) );
+        sample_sum += instrument.payoff(S_T) - S_T ; // chosen control variable is S_T
+    }
+
+    return std::exp(-r * T) * ( sample_sum/(nb_samples) + S0*std::exp(r*T) ); // E[S_T] = S0*exp(rT)
+}

@@ -4,6 +4,11 @@
 #include <random>
 #include <array>
 
+double PI = std::acos(-1.0);
+
+double standard_normal_pdf(double x) {
+    return ( 1 / (std::sqrt(2 * PI)) ) * std::exp(-0.5 * x*x);
+}
 
 
 double normal_cdf(double x) {
