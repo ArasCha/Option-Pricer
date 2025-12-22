@@ -4,29 +4,31 @@
 #include "option.hpp"
 #include <memory>
 #include "Pricers/Pricer.hpp"
+#include <iomanip>
 
 
+template<int N>
+void pricer_benchmark(OptionPricer** pricers, int nb_runs) {
+
+    for (int i=0; i<N; i++) {
+        auto results = pricers[i]->benchmark(nb_runs);
+        std::cout << typeid(*pricers[i]).name() << std::fixed << std::setprecision(6) << " time (ms): " << results.first << " price: " << results.second << std::endl;
+    }
+}
 
 int main() {
-    Call call(1000.0, 0.01, 0.5, 0.25, 95.0);
+    Call call(1000.0, 0.1, 0.7, 4.25, 95.0);
     Put put(1000.0, 0.01, 0.5, 0.25, 95.0);
 
     BlackScholesPricer bspricer(call);
 
-    int nb_samples = 10000000;
+    int nb_samples = 10000;
     NaiveMCpricer naiveMCpricer(call, nb_samples);
     AntitheticMCpricer antitheticMCpricer(call, nb_samples);
+    ControlVariatesMCpricer cvMCpricer(call, nb_samples);
+    OptionPricer* pricers[4] = {&bspricer, &naiveMCpricer, &antitheticMCpricer, &cvMCpricer};
 
-    // int nb_runs = 10000;
-    // auto bsResults = bspricer.benchmark(nb_runs);
-    // auto mcResults = mcpricer.benchmark(nb_runs);
-
-    // std::cout << "time: " << bsResults.first << " price: " << bsResults.second << std::endl;
-    // std::cout << "time: " << mcResults.first << " price: " << mcResults.second << std::endl;
-
-    std::cout << "price BS: " << bspricer.calculate() << std::endl;
-    std::cout << "price Naive MC: " << naiveMCpricer.calculate() << std::endl;
-    std::cout << "price Antithetic MC: " << antitheticMCpricer.calculate() << std::endl;
+    pricer_benchmark<4>(pricers, 1000);
 
     return 0;
 }
